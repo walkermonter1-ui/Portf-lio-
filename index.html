@@ -8,17 +8,26 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: black;
-    color: white;
+    background: url('https://st.depositphotos.com/1000816/2291/i/950/depositphotos_22911280-stock-photo-business-team-formed-of-young.jpg') no-repeat center center/cover;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
-/* Container */
+/* overlay escuro */
+body::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+}
+
+/* container */
 .box {
-    background: #0a0a0a;
+    position: relative;
+    background: rgba(10,10,10,0.9);
     padding: 30px;
     border-radius: 10px;
     width: 300px;
@@ -26,26 +35,22 @@ body {
     box-shadow: 0 0 20px red;
 }
 
-/* Título */
 h1 {
     color: red;
     text-shadow: 0 0 10px red;
 }
 
-/* Inputs */
 input {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
     border: none;
-    outline: none;
     border-radius: 5px;
     background: black;
     color: red;
     box-shadow: 0 0 5px red inset;
 }
 
-/* Botões */
 button {
     width: 100%;
     padding: 10px;
@@ -53,29 +58,19 @@ button {
     color: red;
     border: 1px solid red;
     cursor: pointer;
-    margin-top: 10px;
-    transition: 0.3s;
 }
 
 button:hover {
     background: red;
     color: black;
-    box-shadow: 0 0 15px red;
 }
 
-/* Links */
 .link {
     margin-top: 10px;
-    cursor: pointer;
     color: #aaa;
-    font-size: 14px;
+    cursor: pointer;
 }
 
-.link:hover {
-    color: red;
-}
-
-/* Esconder telas */
 .hidden {
     display: none;
 }
@@ -86,94 +81,73 @@ button:hover {
 
 <div class="box">
 
-    <!-- LOGIN -->
-    <div id="login">
-        <h1>BCM Taxi</h1>
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="senha" placeholder="Senha">
-        <button onclick="login()">Entrar</button>
+<div id="login">
+<h1>BCM Taxi</h1>
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="senha" placeholder="Senha">
+<button onclick="login()">Entrar</button>
 
-        <div class="link" onclick="showRegister()">Criar conta</div>
-        <div class="link" onclick="showForgot()">Esqueceu a senha?</div>
-    </div>
+<div class="link" onclick="showRegister()">Criar conta</div>
+<div class="link" onclick="showForgot()">Esqueceu a senha?</div>
+</div>
 
-    <!-- REGISTRO -->
-    <div id="register" class="hidden">
-        <h1>Registrar</h1>
-        <input type="email" id="newEmail" placeholder="Email">
-        <input type="password" id="newSenha" placeholder="Senha">
-        <button onclick="register()">Criar Conta</button>
+<div id="register" class="hidden">
+<h1>Registrar</h1>
+<input type="email" id="newEmail" placeholder="Email">
+<input type="password" id="newSenha" placeholder="Senha">
+<button onclick="register()">Criar Conta</button>
+<div class="link" onclick="showLogin()">Voltar</div>
+</div>
 
-        <div class="link" onclick="showLogin()">Voltar</div>
-    </div>
-
-    <!-- ESQUECEU SENHA -->
-    <div id="forgot" class="hidden">
-        <h1>Recuperar</h1>
-        <input type="email" placeholder="Digite seu email">
-        <button onclick="alert('Link enviado (simulação)')">Enviar</button>
-
-        <div class="link" onclick="showLogin()">Voltar</div>
-    </div>
+<div id="forgot" class="hidden">
+<h1>Recuperar</h1>
+<input type="email" placeholder="Digite seu email">
+<button onclick="alert('Link enviado (simulação)')">Enviar</button>
+<div class="link" onclick="showLogin()">Voltar</div>
+</div>
 
 </div>
 
 <script>
-
-/* Alternar telas */
 function showRegister() {
-    document.getElementById("login").classList.add("hidden");
-    document.getElementById("register").classList.remove("hidden");
+    login.classList.add("hidden");
+    register.classList.remove("hidden");
 }
 
 function showLogin() {
-    document.getElementById("login").classList.remove("hidden");
-    document.getElementById("register").classList.add("hidden");
-    document.getElementById("forgot").classList.add("hidden");
+    login.classList.remove("hidden");
+    register.classList.add("hidden");
+    forgot.classList.add("hidden");
 }
 
 function showForgot() {
-    document.getElementById("login").classList.add("hidden");
-    document.getElementById("forgot").classList.remove("hidden");
+    login.classList.add("hidden");
+    forgot.classList.remove("hidden");
 }
 
-/* Registro (simulado) */
 function register() {
-    let email = document.getElementById("newEmail").value;
-    let senha = document.getElementById("newSenha").value;
-
-    if (email && senha) {
-        localStorage.setItem("user", email);
-        localStorage.setItem("pass", senha);
-        alert("Conta criada!");
-        showLogin();
-    } else {
-        alert("Preencha tudo!");
-    }
+    localStorage.setItem("user", newEmail.value);
+    localStorage.setItem("pass", newSenha.value);
+    alert("Conta criada!");
+    showLogin();
 }
 
-/* Login */
 function login() {
     let email = document.getElementById("email").value;
     let senha = document.getElementById("senha").value;
 
-    // LOGIN FIXO
     if (email === "walkermonter1@gmail.com" && senha === "bcm123") {
-        alert("Acesso autorizado (admin)");
+        window.location.href = "main.html";
         return;
     }
 
-    // LOGIN REGISTRADO
-    let savedEmail = localStorage.getItem("user");
-    let savedPass = localStorage.getItem("pass");
-
-    if (email === savedEmail && senha === savedPass) {
-        alert("Login bem sucedido!");
+    if (email === localStorage.getItem("user") &&
+        senha === localStorage.getItem("pass")) {
+        window.location.href = "main.html";
     } else {
         alert("Acesso negado!");
     }
 }
-
 </script>
 
 </body>
