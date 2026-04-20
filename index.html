@@ -1,89 +1,179 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
-  <title>Login Firebase Google</title>
+<meta charset="UTF-8">
+<title>BCM Taxi - Login</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container */
+.box {
+    background: #0a0a0a;
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 0 20px red;
+}
+
+/* Título */
+h1 {
+    color: red;
+    text-shadow: 0 0 10px red;
+}
+
+/* Inputs */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    background: black;
+    color: red;
+    box-shadow: 0 0 5px red inset;
+}
+
+/* Botões */
+button {
+    width: 100%;
+    padding: 10px;
+    background: black;
+    color: red;
+    border: 1px solid red;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: red;
+    color: black;
+    box-shadow: 0 0 15px red;
+}
+
+/* Links */
+.link {
+    margin-top: 10px;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 14px;
+}
+
+.link:hover {
+    color: red;
+}
+
+/* Esconder telas */
+.hidden {
+    display: none;
+}
+</style>
 </head>
+
 <body>
 
-<h2>Login com Google</h2>
-<button onclick="googleLogin()">Entrar com Google</button>
+<div class="box">
 
-<h3>Usuários (Tempo Real)</h3>
-<ul id="lista"></ul>
+    <!-- LOGIN -->
+    <div id="login">
+        <h1>BCM Taxi</h1>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="senha" placeholder="Senha">
+        <button onclick="login()">Entrar</button>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+        <div class="link" onclick="showRegister()">Criar conta</div>
+        <div class="link" onclick="showForgot()">Esqueceu a senha?</div>
+    </div>
 
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js";
+    <!-- REGISTRO -->
+    <div id="register" class="hidden">
+        <h1>Registrar</h1>
+        <input type="email" id="newEmail" placeholder="Email">
+        <input type="password" id="newSenha" placeholder="Senha">
+        <button onclick="register()">Criar Conta</button>
 
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
-  signInWithPopup 
-} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+        <div class="link" onclick="showLogin()">Voltar</div>
+    </div>
 
-import { 
-  getDatabase, 
-  ref, 
-  set, 
-  onValue 
-} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+    <!-- ESQUECEU SENHA -->
+    <div id="forgot" class="hidden">
+        <h1>Recuperar</h1>
+        <input type="email" placeholder="Digite seu email">
+        <button onclick="alert('Link enviado (simulação)')">Enviar</button>
 
-// 🔥 TUA CONFIG (já pronta)
-const firebaseConfig = {
-  apiKey: "AIzaSyAqEpWDNTzWnS336_gp4tadr30vJg53iQE",
-  authDomain: "oidev-f0134.firebaseapp.com",
-  databaseURL: "https://oidev-f0134-default-rtdb.firebaseio.com",
-  projectId: "oidev-f0134",
-  storageBucket: "oidev-f0134.firebasestorage.app",
-  messagingSenderId: "33736102165",
-  appId: "1:33736102165:web:e9e6ea5a833a72c831d91c",
-  measurementId: "G-J6W2QX0LC9"
-};
+        <div class="link" onclick="showLogin()">Voltar</div>
+    </div>
 
-// INICIAR
-const app = initializeApp(firebaseConfig);
-getAnalytics(app);
+</div>
 
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-const db = getDatabase(app);
+<script>
 
-// 🔐 LOGIN GOOGLE
-window.googleLogin = async () => {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
+/* Alternar telas */
+function showRegister() {
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("register").classList.remove("hidden");
+}
 
-    // SALVAR NO DATABASE
-    await set(ref(db, "users/" + user.uid), {
-      nome: user.displayName,
-      email: user.email,
-      foto: user.photoURL,
-      ultimoLogin: new Date().toISOString()
-    });
+function showLogin() {
+    document.getElementById("login").classList.remove("hidden");
+    document.getElementById("register").classList.add("hidden");
+    document.getElementById("forgot").classList.add("hidden");
+}
 
-    alert("Login feito com sucesso!");
-  } catch (e) {
-    alert(e.message);
-  }
-};
+function showForgot() {
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("forgot").classList.remove("hidden");
+}
 
-// 👀 VER DADOS EM TEMPO REAL
-const lista = document.getElementById("lista");
+/* Registro (simulado) */
+function register() {
+    let email = document.getElementById("newEmail").value;
+    let senha = document.getElementById("newSenha").value;
 
-onValue(ref(db, "users/"), (snapshot) => {
-  lista.innerHTML = "";
+    if (email && senha) {
+        localStorage.setItem("user", email);
+        localStorage.setItem("pass", senha);
+        alert("Conta criada!");
+        showLogin();
+    } else {
+        alert("Preencha tudo!");
+    }
+}
 
-  const data = snapshot.val();
-  if (!data) return;
+/* Login */
+function login() {
+    let email = document.getElementById("email").value;
+    let senha = document.getElementById("senha").value;
 
-  for (let id in data) {
-    const li = document.createElement("li");
-    li.innerText = data[id].nome + " | " + data[id].email;
-    lista.appendChild(li);
-  }
-});
+    // LOGIN FIXO
+    if (email === "walkermonter1@gmail.com" && senha === "bcm123") {
+        alert("Acesso autorizado (admin)");
+        return;
+    }
+
+    // LOGIN REGISTRADO
+    let savedEmail = localStorage.getItem("user");
+    let savedPass = localStorage.getItem("pass");
+
+    if (email === savedEmail && senha === savedPass) {
+        alert("Login bem sucedido!");
+    } else {
+        alert("Acesso negado!");
+    }
+}
+
 </script>
 
 </body>
