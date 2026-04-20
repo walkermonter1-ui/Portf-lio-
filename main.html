@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>BCM Taxi</title>
 
-<!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <style>
@@ -15,7 +14,6 @@ body {
     color: white;
 }
 
-/* topo */
 .header {
     display: flex;
     justify-content: space-between;
@@ -29,13 +27,11 @@ body {
     color: red;
 }
 
-/* mapa */
 #map {
     width: 100%;
     height: 50vh;
 }
 
-/* conteúdo */
 .container {
     padding: 15px;
 }
@@ -43,10 +39,10 @@ body {
 input {
     width: 100%;
     padding: 10px;
-    border: none;
     margin-bottom: 10px;
     background: #111;
     color: red;
+    border: none;
 }
 
 button {
@@ -55,17 +51,10 @@ button {
     background: black;
     border: 1px solid red;
     color: red;
-    cursor: pointer;
-}
-
-button:hover {
-    background: red;
-    color: black;
 }
 
 #status {
     margin-top: 10px;
-    color: #aaa;
 }
 </style>
 </head>
@@ -82,66 +71,79 @@ button:hover {
 <div class="container">
     <input type="text" placeholder="Pesquisar motorista por ID">
     <button onclick="buscarMotorista()">Agendar Viagem</button>
-    <div id="status"></div>
+    <div id="status">Aguardando GPS...</div>
 </div>
 
-<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
 let map;
 
-/* Inicializar mapa */
+/* iniciar mapa */
 function initMap(lat, lng) {
+    document.getElementById("status").innerText = "📍 Localização detectada";
+
     map = L.map('map').setView([lat, lng], 15);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
+        maxZoom: 19
     }).addTo(map);
 
     L.marker([lat, lng]).addTo(map)
-        .bindPopup("📍 Você está aqui")
+        .bindPopup("Você está aqui")
         .openPopup();
 }
 
-/* GPS */
+/* erro */
+function erroGPS(e) {
+    console.log(e);
+    document.getElementById("status").innerText = "❌ Erro ao obter GPS";
+
+    // fallback (Luanda)
+    initMap(-8.8383, 13.2344);
+}
+
+/* obter localização */
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (pos) => {
                 initMap(pos.coords.latitude, pos.coords.longitude);
             },
-            () => {
-                alert("Ative o GPS!");
+            erroGPS,
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
             }
         );
     } else {
-        alert("GPS não suportado");
+        erroGPS();
     }
 }
 
-/* Simulação */
+/* simulação */
 function buscarMotorista() {
     let status = document.getElementById("status");
 
-    status.innerText = "🔍 Procurando motorista perto da sua localização...";
+    status.innerText = "🔍 Procurando motorista...";
 
     setTimeout(() => {
-        status.innerText = "📡 Encontrando motoristas próximos...";
+        status.innerText = "📡 Encontrando...";
     }, 2000);
 
     setTimeout(() => {
-        status.innerText = "🚕 Motorista encontrado! Chegando em 5 minutos.";
+        status.innerText = "🚕 Motorista encontrado!";
     }, 4000);
 }
 
-/* Logout */
+/* sair */
 function logout() {
     window.location.href = "index.html";
 }
 
-/* Iniciar */
-getLocation();
+/* iniciar */
+window.onload = getLocation;
 </script>
 
 </body>
