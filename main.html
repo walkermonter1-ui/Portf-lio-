@@ -4,57 +4,108 @@
 <meta charset="UTF-8">
 <title>BCM Taxi</title>
 
+<!-- Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <style>
 body {
     margin: 0;
     font-family: Arial;
-    background: black;
+    background: url('https://4kwallpapers.com/images/walls/thumbs_3t/2288.png') no-repeat center center/cover;
     color: white;
 }
 
+/* overlay */
+body::before {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    z-index: -1;
+}
+
+/* header */
 .header {
     display: flex;
     justify-content: space-between;
     padding: 15px;
-    background: #111;
-    box-shadow: 0 0 10px red;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 15px red;
 }
 
 .logout {
     cursor: pointer;
     color: red;
+    transition: 0.3s;
 }
 
+.logout:hover {
+    text-shadow: 0 0 10px red;
+}
+
+/* mapa */
 #map {
     width: 100%;
     height: 50vh;
+    border-bottom: 1px solid red;
 }
 
+/* container */
 .container {
     padding: 15px;
 }
 
+/* input */
 input {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-bottom: 10px;
-    background: #111;
+    background: rgba(0,0,0,0.7);
     color: red;
-    border: none;
+    border: 1px solid red;
+    border-radius: 5px;
 }
 
+/* botão */
 button {
     width: 100%;
     padding: 15px;
     background: black;
     border: 1px solid red;
     color: red;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
 }
 
+button:hover {
+    background: red;
+    color: black;
+    box-shadow: 0 0 20px red;
+}
+
+/* pulse */
+button.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 5px red; }
+    50% { box-shadow: 0 0 20px red; }
+    100% { box-shadow: 0 0 5px red; }
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+/* status */
 #status {
     margin-top: 10px;
+    opacity: 0;
+    transition: 0.5s;
 }
 </style>
 </head>
@@ -74,12 +125,13 @@ button {
     <div id="status">Aguardando GPS...</div>
 </div>
 
+<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
 let map;
 
-/* iniciar mapa */
+/* mapa */
 function initMap(lat, lng) {
     document.getElementById("status").innerText = "📍 Localização detectada";
 
@@ -94,16 +146,16 @@ function initMap(lat, lng) {
         .openPopup();
 }
 
-/* erro */
+/* erro gps */
 function erroGPS(e) {
     console.log(e);
-    document.getElementById("status").innerText = "❌ Erro ao obter GPS";
+    document.getElementById("status").innerText = "❌ Erro ao obter GPS (usando fallback)";
 
-    // fallback (Luanda)
+    // Luanda fallback
     initMap(-8.8383, 13.2344);
 }
 
-/* obter localização */
+/* pegar localização */
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -125,15 +177,20 @@ function getLocation() {
 /* simulação */
 function buscarMotorista() {
     let status = document.getElementById("status");
+    let btn = document.querySelector("button");
 
+    btn.classList.add("pulse");
+
+    status.style.opacity = 1;
     status.innerText = "🔍 Procurando motorista...";
 
     setTimeout(() => {
-        status.innerText = "📡 Encontrando...";
+        status.innerText = "📡 Localizando motoristas próximos...";
     }, 2000);
 
     setTimeout(() => {
-        status.innerText = "🚕 Motorista encontrado!";
+        status.innerText = "🚕 Motorista encontrado! Chegando em 5 minutos.";
+        btn.classList.remove("pulse");
     }, 4000);
 }
 
@@ -142,8 +199,16 @@ function logout() {
     window.location.href = "index.html";
 }
 
-/* iniciar */
-window.onload = getLocation;
+/* animação ao carregar */
+window.onload = () => {
+    getLocation();
+
+    document.body.style.opacity = 0;
+    setTimeout(() => {
+        document.body.style.transition = "1s";
+        document.body.style.opacity = 1;
+    }, 100);
+};
 </script>
 
 </body>
