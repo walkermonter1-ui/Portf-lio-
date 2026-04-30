@@ -1,1 +1,196 @@
-404: Not Found
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>AVIATOR GREEN VIP</title>
+
+<style>
+body {
+    margin:0;
+    font-family: Arial;
+    background: radial-gradient(circle, #1a001f, #000);
+    color:#fff;
+}
+
+/* LOGIN */
+#login {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.login-box {
+    background:#2a0033;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 0 20px #cc00ff;
+    text-align:center;
+}
+
+input {
+    display:block;
+    margin:10px auto;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+}
+
+button {
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    background:#cc00ff;
+    color:#fff;
+    cursor:pointer;
+}
+
+/* PAINEL */
+#painel {
+    display:none;
+    text-align:center;
+    padding-top:40px;
+}
+
+.icones {
+    display:flex;
+    justify-content:center;
+    gap:40px;
+}
+
+.card {
+    text-align:center;
+}
+
+.circle {
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    overflow:hidden;
+    box-shadow:0 0 20px #ff00ff;
+    margin:auto;
+}
+
+.circle img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* ROBÔ */
+#robo {
+    display:none;
+    text-align:center;
+    margin-top:50px;
+}
+
+.robo img {
+    width:120px;
+    height:120px;
+    border-radius:20px;
+    animation: float 2s infinite ease-in-out;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px);}
+    50% { transform: translateY(-15px);}
+    100% { transform: translateY(0px);}
+}
+
+.result {
+    font-size:40px;
+    margin-top:20px;
+    color:#00ffcc;
+    text-shadow:0 0 15px #00ffcc;
+}
+</style>
+
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+    <div class="login-box">
+        <h2>BOT AVIATOR VIP</h2>
+        <input id="user" placeholder="Usuário">
+        <input id="pass" type="password" placeholder="Senha">
+        <button onclick="login()">Entrar</button>
+    </div>
+</div>
+
+<!-- PAINEL -->
+<div id="painel">
+    <h2>Escolha a Plataforma</h2>
+
+    <div class="icones">
+
+        <div class="card">
+            <div class="circle">
+                <img src="ele.jpg">
+            </div>
+            <p>Elephantbet</p>
+            <button onclick="abrirRobo()">Gerar Sinal</button>
+        </div>
+
+        <div class="card">
+            <div class="circle">
+                <img src="8.jpg">
+            </div>
+            <p>888bets</p>
+            <button onclick="abrirRobo()">Gerar Sinal</button>
+        </div>
+
+        <div class="card">
+            <div class="circle">
+                <img src="p.jpg">
+            </div>
+            <p>Premierbet.co.ao</p>
+            <button onclick="abrirRobo()">Gerar Sinal</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- ROBO -->
+<div id="robo">
+    <div class="robo">
+        <img src="av.jpg">
+    </div>
+    <br>
+    <button onclick="gerar()">GERAR SINAL</button>
+    <div class="result" id="resultado"></div>
+</div>
+
+<script>
+
+function login() {
+    let u = document.getElementById("user").value;
+    let p = document.getElementById("pass").value;
+
+    if(u === "9090" && p === "1090") {
+        document.getElementById("login").style.display="none";
+        document.getElementById("painel").style.display="block";
+    } else {
+        alert("Login inválido");
+    }
+}
+
+function abrirRobo() {
+    document.getElementById("painel").style.display="none";
+    document.getElementById("robo").style.display="block";
+}
+
+function gerar() {
+    let res = document.getElementById("resultado");
+    res.innerHTML = "Analisando...";
+
+    setTimeout(() => {
+        let valor = (Math.random() * 99 + 1).toFixed(2);
+        res.innerHTML = valor + "x";
+    }, 2000);
+}
+
+</script>
+
+</body>
+</html>
