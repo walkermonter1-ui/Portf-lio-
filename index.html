@@ -1,666 +1,358 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Aviator | Simulador de Sinais Dinâmico</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Método Corpo Leve | Ebook de Emagrecimento</title>
 
-        body {
-            min-height: 100vh;
-            background: radial-gradient(circle at 20% 30%, #0a0f1e, #03060c);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, 'Inter', sans-serif;
-            padding: 20px;
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-        /* container principal */
-        .game-container {
-            max-width: 1300px;
-            width: 100%;
-            background: rgba(10, 20, 30, 0.45);
-            backdrop-filter: blur(2px);
-            border-radius: 3rem;
-            padding: 1.5rem;
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            transition: all 0.2s;
-        }
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+    }
 
-        /* sky / canvas area */
-        .sky-area {
-            background: linear-gradient(145deg, #0b2b3b 0%, #09212e 100%);
-            border-radius: 2rem;
-            padding: 1rem;
-            box-shadow: inset 0 8px 14px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
-            border-bottom: 2px solid #ffd966;
-        }
+    body{
+      background:#0f0f0f;
+      color:#fff;
+      overflow-x:hidden;
+    }
 
-        canvas {
-            display: block;
-            width: 100%;
-            height: auto;
-            background: radial-gradient(ellipse at 30% 40%, #1c4e6e, #06212e);
-            border-radius: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 6px 14px black;
-            transition: transform 0.2s ease;
-        }
+    .hero{
+      min-height:100vh;
+      background:
+      linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,.75)),
+      url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1600&auto=format&fit=crop');
+      background-size:cover;
+      background-position:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:40px 20px;
+    }
 
-        canvas:active {
-            transform: scale(0.99);
-        }
+    .hero-content{
+      max-width:850px;
+    }
 
-        /* cartão de informações e sinal */
-        .info-panel {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1.8rem;
-            gap: 1rem;
-            background: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(8px);
-            padding: 1rem 2rem;
-            border-radius: 3rem;
-            border: 1px solid rgba(255, 200, 50, 0.5);
-        }
+    .badge{
+      display:inline-block;
+      background:#22c55e;
+      color:#fff;
+      padding:10px 20px;
+      border-radius:50px;
+      font-size:14px;
+      font-weight:600;
+      margin-bottom:25px;
+      box-shadow:0 0 20px rgba(34,197,94,.4);
+    }
 
-        .signal-box {
-            background: #000000aa;
-            padding: 0.6rem 1.6rem;
-            border-radius: 2.5rem;
-            display: flex;
-            align-items: baseline;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+    h1{
+      font-size:58px;
+      line-height:1.1;
+      margin-bottom:25px;
+      font-weight:800;
+    }
 
-        .signal-label {
-            font-weight: 600;
-            letter-spacing: 2px;
-            color: #ffd98c;
-            text-transform: uppercase;
-            font-size: 1rem;
-            text-shadow: 0 0 4px #ffb347;
-        }
+    h1 span{
+      color:#22c55e;
+    }
 
-        .multiplier-value {
-            font-size: 2.8rem;
-            font-weight: 800;
-            font-family: 'Monaco', 'Courier New', monospace;
-            background: linear-gradient(135deg, #FEE190, #FFB347);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 12px rgba(255, 180, 60, 0.6);
-            line-height: 1;
-        }
+    .subtitle{
+      font-size:20px;
+      color:#ddd;
+      line-height:1.8;
+      margin-bottom:35px;
+    }
 
-        .multiplier-unit {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #ffcf7a;
-        }
+    .cta-btn{
+      display:inline-block;
+      background:#22c55e;
+      color:#fff;
+      text-decoration:none;
+      padding:18px 40px;
+      border-radius:14px;
+      font-size:20px;
+      font-weight:700;
+      transition:.3s;
+      box-shadow:0 10px 30px rgba(34,197,94,.35);
+    }
 
-        .btn-generate {
-            background: radial-gradient(circle at 30% 10%, #f0b429, #c97e0a);
-            border: none;
-            padding: 0.9rem 2.4rem;
-            border-radius: 3rem;
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #1e2a2f;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 6px 0 #7a3e00;
-            font-family: inherit;
-            letter-spacing: 1px;
-        }
+    .cta-btn:hover{
+      transform:translateY(-5px) scale(1.03);
+      background:#16a34a;
+    }
 
-        .btn-generate:active {
-            transform: translateY(3px);
-            box-shadow: 0 2px 0 #7a3e00;
-        }
+    .section{
+      padding:90px 20px;
+    }
 
-        .btn-generate img, .btn-generate svg {
-            width: 26px;
-            height: 26px;
-            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
-        }
+    .container{
+      max-width:1200px;
+      margin:auto;
+    }
 
-        .history-area {
-            margin-top: 1.5rem;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 2rem;
-            padding: 0.9rem 1.5rem;
-            backdrop-filter: blur(4px);
-        }
+    .title{
+      text-align:center;
+      font-size:42px;
+      margin-bottom:20px;
+      font-weight:800;
+    }
 
-        .history-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #ffe0a3;
-            font-weight: 600;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
+    .desc{
+      text-align:center;
+      max-width:750px;
+      margin:0 auto 60px;
+      color:#bdbdbd;
+      line-height:1.8;
+    }
 
-        .history-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            max-height: 85px;
-            overflow-y: auto;
-            padding: 6px 4px;
-        }
+    .benefits{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:25px;
+    }
 
-        .history-badge {
-            background: #10161f;
-            padding: 6px 18px;
-            border-radius: 40px;
-            font-weight: bold;
-            font-size: 1rem;
-            font-family: monospace;
-            color: #ffcd7e;
-            box-shadow: inset 0 0 2px #ffbb44, 0 2px 5px black;
-            transition: 0.1s;
-            border-left: 3px solid gold;
-        }
+    .card{
+      background:#181818;
+      padding:30px;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,.06);
+      transition:.3s;
+    }
 
-        /* animação do avião */
-        @keyframes flySky {
-            0% {
-                transform: translateX(-20%) translateY(5%) rotate(-5deg);
-                opacity: 0.9;
-            }
-            40% {
-                transform: translateX(40%) translateY(-8%) rotate(3deg);
-            }
-            70% {
-                transform: translateX(80%) translateY(2%) rotate(-2deg);
-            }
-            100% {
-                transform: translateX(120%) translateY(-5%) rotate(6deg);
-            }
-        }
+    .card:hover{
+      transform:translateY(-8px);
+      border-color:#22c55e;
+    }
 
-        .airplane-icon {
-            position: absolute;
-            font-size: 3.5rem;
-            pointer-events: none;
-            z-index: 20;
-            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.5));
-            transition: left 0.02s linear;
-            will-change: transform;
-        }
+    .card h3{
+      margin-bottom:15px;
+      color:#22c55e;
+      font-size:22px;
+    }
 
-        /* responsivo */
-        @media (max-width: 680px) {
-            .game-container {
-                padding: 0.8rem;
-            }
-            .multiplier-value {
-                font-size: 1.8rem;
-            }
-            .btn-generate {
-                padding: 0.6rem 1.4rem;
-                font-size: 1rem;
-            }
-            .signal-box {
-                padding: 0.4rem 1rem;
-            }
-            .info-panel {
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-            }
-            .history-badge {
-                font-size: 0.8rem;
-                padding: 4px 12px;
-            }
-            .airplane-icon {
-                font-size: 2.5rem;
-            }
-        }
-    </style>
+    .card p{
+      color:#cfcfcf;
+      line-height:1.7;
+    }
+
+    .gallery{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:20px;
+      margin-top:50px;
+    }
+
+    .gallery img{
+      width:100%;
+      height:350px;
+      object-fit:cover;
+      border-radius:20px;
+    }
+
+    .offer{
+      background:linear-gradient(135deg,#16a34a,#22c55e);
+      padding:70px 30px;
+      border-radius:30px;
+      text-align:center;
+      margin-top:70px;
+      color:#fff;
+    }
+
+    .offer h2{
+      font-size:48px;
+      margin-bottom:15px;
+    }
+
+    .price{
+      font-size:70px;
+      font-weight:800;
+      margin:20px 0;
+    }
+
+    .small{
+      opacity:.9;
+      margin-bottom:30px;
+    }
+
+    footer{
+      padding:35px 20px;
+      text-align:center;
+      color:#888;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+
+    @media(max-width:768px){
+
+      h1{
+        font-size:40px;
+      }
+
+      .subtitle{
+        font-size:17px;
+      }
+
+      .title{
+        font-size:32px;
+      }
+
+      .offer h2{
+        font-size:34px;
+      }
+
+      .price{
+        font-size:52px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="game-container">
-    <div class="sky-area" id="skyArea">
-        <canvas id="gameCanvas" width="1100" height="400" style="width:100%; height:auto; max-width:1100px; aspect-ratio:1100/400"></canvas>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+
+      <div class="badge">
+        🔥 Ebook 100% Digital
+      </div>
+
+      <h1>
+        Transforme Seu Corpo Com o <span>Método Corpo Leve</span>
+      </h1>
+
+      <p class="subtitle">
+        Descubra o método simples e eficiente para emagrecer,
+        reduzir medidas e recuperar sua autoestima sem dietas
+        impossíveis ou sofrimento.
+      </p>
+
+      <a class="cta-btn"
+         href="https://wa.me/244956289088?text=Olá,%20quero%20comprar%20o%20ebook%20Método%20Corpo%20Leve"
+         target="_blank">
+         QUERO EMAGRECER AGORA
+      </a>
+
     </div>
+  </section>
 
-    <div class="info-panel">
-        <div class="signal-box">
-            <span class="signal-label">⚡ SINAL AVIATOR ⚡</span>
-            <div style="display: flex; align-items: baseline; gap: 6px;">
-                <span class="multiplier-value" id="currentMultiplier">1.00</span>
-                <span class="multiplier-unit">x</span>
-            </div>
+  <!-- BENEFÍCIOS -->
+  <section class="section">
+    <div class="container">
+
+      <h2 class="title">
+        O Que Você Vai Aprender
+      </h2>
+
+      <p class="desc">
+        O Método Corpo Leve reúne estratégias práticas para ajudar
+        você a emagrecer de forma saudável e sustentável.
+      </p>
+
+      <div class="benefits">
+
+        <div class="card">
+          <h3>🥗 Alimentação Inteligente</h3>
+          <p>
+            Aprenda como comer melhor sem passar fome e sem dietas extremas.
+          </p>
         </div>
-        <button class="btn-generate" id="generateBtn">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L15 8H9L12 2Z" fill="#FFD966" stroke="#B45F06" stroke-width="1.2"/>
-                <path d="M5 12L11 9V15L5 12Z" fill="#FFB347" stroke="#B45F06" stroke-width="1.2"/>
-                <path d="M19 12L13 9V15L19 12Z" fill="#FFB347" stroke="#B45F06" stroke-width="1.2"/>
-                <circle cx="12" cy="16" r="3" fill="#F4C542" stroke="#B45F06" stroke-width="1"/>
-                <path d="M12 19L12 22M9 20L12 22L15 20" stroke="#FFC857" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            GERAR SINAL ALEATÓRIO
-        </button>
+
+        <div class="card">
+          <h3>🔥 Queima de Gordura</h3>
+          <p>
+            Descubra técnicas simples para acelerar o metabolismo naturalmente.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>💪 Corpo Mais Definido</h3>
+          <p>
+            Tenha acesso a hábitos que ajudam a modelar o corpo e melhorar a autoestima.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>🧠 Mentalidade Forte</h3>
+          <p>
+            Aprenda como manter constância e evitar recaídas durante o processo.
+          </p>
+        </div>
+
+      </div>
+
     </div>
+  </section>
 
-    <div class="history-area">
-        <div class="history-title">
-            📜 ÚLTIMOS SINAIS (1.0x → 1000.0x)
-            <span style="font-size:0.75rem;">🎲 clique no botão</span>
-        </div>
-        <div class="history-list" id="historyList">
-            <div class="history-badge">--</div>
-        </div>
+  <!-- GALERIA -->
+  <section class="section" style="background:#141414;">
+    <div class="container">
+
+      <h2 class="title">
+        Resultados Inspiradores
+      </h2>
+
+      <p class="desc">
+        Milhares de pessoas já começaram a mudar seus hábitos e transformar o corpo.
+      </p>
+
+      <div class="gallery">
+
+        <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1200&auto=format&fit=crop">
+
+        <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1200&auto=format&fit=crop">
+
+        <img src="https://images.unsplash.com/photo-1517963879433-6ad2b056d712?q=80&w=1200&auto=format&fit=crop">
+
+      </div>
+
     </div>
-</div>
+  </section>
 
-<script>
-    (function(){
-        // ---------- DOM elements ----------
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const multiplierSpan = document.getElementById('currentMultiplier');
-        const generateBtn = document.getElementById('generateBtn');
-        const historyContainer = document.getElementById('historyList');
+  <!-- OFERTA -->
+  <section class="section">
+    <div class="container">
 
-        // Tamanhos e proporções responsivas (canvas fixo 1100x400, mas renderizamos bem)
-        let canvasWidth = 1100;
-        let canvasHeight = 400;
-        
-        // Configuração da animação do avião
-        let airplaneX = -120;          // começa fora da tela à esquerda
-        let airplaneY = 180;
-        let animationFrameId = null;
-        let isFlying = false;
-        let flyStartTime = 0;
-        let flyDuration = 1800;        // 1.8s por voo (ajustado)
-        let currentSignal = 1.0;
-        
-        // Histórico (máximo 12 sinais)
-        let historySignals = [];
-        const MAX_HISTORY = 12;
-        
-        // Função para gerar sinal aleatório entre 1.0 e 1000.0 (com duas casas decimais)
-        // Distribuição: maior chance entre baixos e médios, mas com possibilidade de altos extremos
-        function generateRandomMultiplier() {
-            // método mais emocionante: usando distribuição exponencial + uniforme para variar
-            // garantindo 1.0 até 1000.0 inclusive
-            let r = Math.random();
-            let multiplier;
-            if (r < 0.6) {
-                // 60% chances de multiplicadores menores (1.0 a 10.0)
-                multiplier = 1.0 + Math.random() * 9.0;
-            } else if (r < 0.85) {
-                // 25% médios (10.0 a 100.0)
-                multiplier = 10.0 + Math.random() * 90.0;
-            } else {
-                // 15% altíssimos (100.0 até 1000.0)
-                multiplier = 100.0 + Math.random() * 900.0;
-            }
-            // garantir o limite superior 1000.0 e inferior 1.0
-            multiplier = Math.min(1000.0, Math.max(1.0, multiplier));
-            // arredondar bonito para 2 casas decimais
-            return Math.round(multiplier * 100) / 100;
-        }
-        
-        // Atualizar display do multiplicador com animação sutil
-        function updateMultiplierDisplay(value) {
-            multiplierSpan.innerText = value.toFixed(2);
-            // pequeno efeito de "pulse"
-            multiplierSpan.style.transform = 'scale(1.1)';
-            setTimeout(() => {
-                if(multiplierSpan) multiplierSpan.style.transform = 'scale(1)';
-            }, 150);
-        }
-        
-        // Adicionar ao histórico e renderizar na lista
-        function addToHistory(signalValue) {
-            historySignals.unshift(signalValue); // mais recente primeiro
-            if(historySignals.length > MAX_HISTORY) historySignals.pop();
-            // renderizar lista HTML
-            historyContainer.innerHTML = '';
-            if(historySignals.length === 0) {
-                const emptyDiv = document.createElement('div');
-                emptyDiv.className = 'history-badge';
-                emptyDiv.innerText = '--';
-                historyContainer.appendChild(emptyDiv);
-            } else {
-                historySignals.forEach(sig => {
-                    const badge = document.createElement('div');
-                    badge.className = 'history-badge';
-                    // Cor especial para multiplicadores muito altos
-                    if(sig >= 100) badge.style.background = "#3a2800";
-                    if(sig >= 500) badge.style.background = "#5c2e00";
-                    badge.innerText = `${sig.toFixed(2)}x`;
-                    historyContainer.appendChild(badge);
-                });
-            }
-        }
-        
-        // ========== ANIMAÇÃO DO AVIÃO SOBRE O CANVAS ==========
-        // Desenha o cenário completo: nuvens, rastro, avião, aeroporto, texto de sinal
-        
-        function drawBackground() {
-            // céu gradiente
-            const grad = ctx.createLinearGradient(0, 0, 0, canvasHeight);
-            grad.addColorStop(0, '#0f405c');
-            grad.addColorStop(0.7, '#0b2c3b');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-            
-            // nuvens difusas
-            ctx.fillStyle = 'rgba(255,255,240,0.2)';
-            ctx.shadowBlur = 0;
-            for(let i=0;i<12;i++) {
-                ctx.beginPath();
-                let cloudX = (Math.sin(Date.now() * 0.0005 + i) * 30 + i * 110) % (canvasWidth + 200) - 100;
-                let cloudY = 40 + (i * 23) % 180;
-                ctx.ellipse(cloudX, cloudY, 40, 28, 0, 0, Math.PI*2);
-                ctx.fill();
-            }
-            // sol brilhante
-            ctx.beginPath();
-            ctx.arc(canvasWidth-70, 70, 38, 0, Math.PI*2);
-            ctx.fillStyle = '#ffdf8ecc';
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(canvasWidth-70, 70, 28, 0, Math.PI*2);
-            ctx.fillStyle = '#ffe6a3';
-            ctx.fill();
-            
-            // "pista de pouso" simbolica
-            ctx.fillStyle = '#5c4b32';
-            ctx.fillRect(0, canvasHeight-48, canvasWidth, 48);
-            ctx.fillStyle = '#c9ae74';
-            ctx.fillRect(0, canvasHeight-50, canvasWidth, 6);
-            for(let i=0;i<20;i++) {
-                ctx.fillStyle = '#E9D49C';
-                ctx.fillRect(i*70+15, canvasHeight-38, 35, 6);
-            }
-            
-            // texto decorativo "FLY HIGH"
-            ctx.font = 'bold 22px "Poppins", system-ui';
-            ctx.fillStyle = '#ffe2aa60';
-            ctx.shadowBlur = 0;
-            ctx.fillText("✈️ AVIATOR SIM", 40, 60);
-            ctx.font = 'italic 14px monospace';
-            ctx.fillStyle = '#ffe6b380';
-            ctx.fillText("clique e veja o sinal", 45, 95);
-        }
-        
-        // desenha avião moderno e dinâmico
-        function drawAirplane(x, y, angleOffset = 0) {
-            // ângulo baseado na direção (subindo/descendo simulação)
-            let angle = -0.1 + Math.sin(Date.now() * 0.008) * 0.08 + angleOffset;
-            ctx.save();
-            ctx.translate(x, y);
-            ctx.rotate(angle);
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = '#ffc285';
-            // corpo do avião
-            ctx.beginPath();
-            ctx.moveTo(25, 0);
-            ctx.lineTo(-15, -8);
-            ctx.lineTo(-8, -3);
-            ctx.lineTo(-8, 3);
-            ctx.lineTo(-15, 8);
-            ctx.closePath();
-            ctx.fillStyle = '#E8EFF7';
-            ctx.fill();
-            ctx.fillStyle = '#B0C4DE';
-            ctx.beginPath();
-            ctx.rect(-5, -2, 12, 4);
-            ctx.fill();
-            // cockpit
-            ctx.beginPath();
-            ctx.arc(20, 0, 5, 0, Math.PI*2);
-            ctx.fillStyle = '#87CEFA';
-            ctx.fill();
-            ctx.fillStyle = '#0A2F44';
-            ctx.beginPath();
-            ctx.arc(22, -1, 2, 0, Math.PI*2);
-            ctx.fill();
-            // asas laterais
-            ctx.beginPath();
-            ctx.moveTo(5, -12);
-            ctx.lineTo(18, -4);
-            ctx.lineTo(5, -4);
-            ctx.fillStyle = '#B0B8C9';
-            ctx.fill();
-            ctx.beginPath();
-            ctx.moveTo(5, 12);
-            ctx.lineTo(18, 4);
-            ctx.lineTo(5, 4);
-            ctx.fill();
-            // estela / rastro (efeito ao voar)
-            if(isFlying) {
-                ctx.beginPath();
-                ctx.moveTo(-18, -2);
-                ctx.lineTo(-40, -4);
-                ctx.lineTo(-40, 4);
-                ctx.lineTo(-18, 2);
-                ctx.fillStyle = 'rgba(255,220,150,0.7)';
-                ctx.fill();
-            }
-            ctx.restore();
-        }
-        
-        // Desenha o multiplicador do sinal no canto superior direito do canvas
-        function drawSignalOnCanvas(signal) {
-            ctx.font = '800 38px "Monaco", "Courier New", monospace';
-            ctx.shadowBlur = 6;
-            ctx.shadowColor = 'black';
-            let gradient = ctx.createLinearGradient(canvasWidth-210, 15, canvasWidth-60, 55);
-            gradient.addColorStop(0, '#FEDB5F');
-            gradient.addColorStop(1, '#FF9F2E');
-            ctx.fillStyle = gradient;
-            ctx.fillText(`${signal.toFixed(2)}x`, canvasWidth-170, 58);
-            ctx.font = 'bold 13px "Poppins"';
-            ctx.fillStyle = '#FFF3CF';
-            ctx.fillText("SINAL ATIVO", canvasWidth-130, 85);
-        }
-        
-        // Renderização principal do canvas: fundo + avião + texto do sinal
-        function renderCanvas() {
-            if(!ctx) return;
-            drawBackground();
-            
-            // Posição do avião: se estiver "voando", anima com easing
-            let drawX = airplaneX;
-            let drawY = airplaneY;
-            
-            // calcular posição do voo baseado no tempo
-            if(isFlying && flyStartTime > 0) {
-                const now = performance.now();
-                let elapsed = now - flyStartTime;
-                let t = Math.min(1, elapsed / flyDuration);
-                // curva de aceleração simpática (easeOutCubic)
-                let easeOut = 1 - Math.pow(1 - t, 2);
-                // voo da esquerda (-120) até ultrapassar o lado direito (canvasWidth + 100)
-                let startX = -120;
-                let endX = canvasWidth + 140;
-                drawX = startX + (endX - startX) * easeOut;
-                // pequena variação vertical: trajetória realista de subida e descida
-                let sineWave = Math.sin(t * Math.PI * 1.2) * 22;
-                drawY = canvasHeight/2 - 20 + sineWave - (t * 8);
-                if(t >= 1.0) {
-                    // finalizou o voo, parar animação
-                    cancelAnimationFrame(animationFrameId);
-                    isFlying = false;
-                    airplaneX = -120;
-                    airplaneY = canvasHeight/2 - 18;
-                    renderCanvas();  // redesenho sem movimento
-                    return;
-                }
-                airplaneX = drawX;
-                airplaneY = drawY;
-            } else {
-                // avião em espera na pista / hangar
-                if(!isFlying) {
-                    airplaneX = -20;
-                    airplaneY = canvasHeight - 58;
-                }
-                drawX = airplaneX;
-                drawY = airplaneY;
-            }
-            
-            // desenhar avião com pequena rotação dinâmica extra
-            let extraTilt = 0;
-            if(isFlying) extraTilt = Math.sin(Date.now() * 0.015) * 0.07;
-            drawAirplane(drawX, drawY, extraTilt);
-            drawSignalOnCanvas(currentSignal);
-            
-            // efeito de "rastro" especial para sinal alto
-            if(currentSignal >= 200) {
-                ctx.beginPath();
-                ctx.arc(drawX-10, drawY, 12, 0, Math.PI*2);
-                ctx.fillStyle = '#ff9900aa';
-                ctx.fill();
-            }
-            
-            // final, continuar animação se flying ativo
-            if(isFlying) {
-                animationFrameId = requestAnimationFrame(() => renderCanvas());
-            }
-        }
-        
-        // Iniciar voo sempre que um novo sinal é gerado (animação completa)
-        function startFlightAnimation() {
-            if(animationFrameId) cancelAnimationFrame(animationFrameId);
-            // resetar posição do avião para esquerda
-            isFlying = true;
-            airplaneX = -120;
-            airplaneY = canvasHeight/2 - 20;
-            flyStartTime = performance.now();
-            // garantir que o sinal atual seja mostrado no canvas
-            renderCanvas(); 
-            // loop animado
-            if(animationFrameId) cancelAnimationFrame(animationFrameId);
-            animationFrameId = requestAnimationFrame(function animateFlight() {
-                renderCanvas();
-                if(isFlying) animationFrameId = requestAnimationFrame(animateFlight);
-            });
-        }
-        
-        // Evento principal: gerar sinal aleatório, atualizar display, histórico, iniciar voo do avião
-        function generateNewSignal() {
-            // gerar sinal entre 1.0 e 1000.0
-            const newMultiplier = generateRandomMultiplier();
-            currentSignal = newMultiplier;
-            
-            // atualizar interface principal
-            updateMultiplierDisplay(currentSignal);
-            addToHistory(currentSignal);
-            
-            // Efeito sonoro visual (pequeno estouro de luz no canvas)
-            flashCanvasEffect();
-            
-            // Iniciar animação de avião voando sempre que clicar!
-            startFlightAnimation();
-            
-            // Bônus: Se o multiplicador for extremo > 800, tremer levemente botão
-            if(currentSignal > 800) {
-                const btn = generateBtn;
-                btn.style.transform = 'scale(1.05)';
-                setTimeout(() => btn.style.transform = '', 200);
-            }
-        }
-        
-        // efeito flash branco + dourado no canvas
-        function flashCanvasEffect() {
-            const tempCtx = ctx;
-            tempCtx.save();
-            tempCtx.fillStyle = 'rgba(255,215,0,0.35)';
-            tempCtx.fillRect(0, 0, canvasWidth, canvasHeight);
-            setTimeout(() => {
-                renderCanvas(); // re-render após breve flash
-            }, 80);
-            setTimeout(() => {
-                renderCanvas();
-            }, 160);
-        }
-        
-        // funcao de inicializar e adicionar alguns sinais de exemplo no histórico
-        function initHistoryDemo() {
-            let demoSignals = [2.35, 5.67, 12.89, 45.12, 789.42, 1.97, 8.33];
-            demoSignals.forEach(sig => addToHistory(sig));
-            // ultimo sinal mostrando algum aleatório, mas não conflita
-            currentSignal = 2.54;
-            updateMultiplierDisplay(currentSignal);
-            renderCanvas();
-        }
-        
-        // garantir resize adaptativo do canvas render
-        function handleCanvasSize() {
-            // mantemos canvas sempre com dimensões lógicas 1100x400, mas CSS escalonável
-            if(canvas) {
-                canvas.width = 1100;
-                canvas.height = 400;
-                canvasWidth = 1100;
-                canvasHeight = 400;
-                renderCanvas();
-            }
-        }
-        
-        // evento de clique do botão
-        generateBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            generateNewSignal();
-        });
-        
-        // Inicializar canvas e eventos
-        window.addEventListener('load', () => {
-            handleCanvasSize();
-            initHistoryDemo();
-            // set padrão voador não ativo, render estático
-            isFlying = false;
-            airplaneX = -20;
-            airplaneY = canvasHeight - 58;
-            renderCanvas();
-            // adicional: animação ambiente suave (pequenos movimentos só para nuvens)
-            function ambientRedraw() {
-                if(!isFlying) renderCanvas();
-                requestAnimationFrame(ambientRedraw);
-            }
-            // só manter ambiente fresco sem conflito com voo
-            let ambientFrame;
-            function ambientLoop() {
-                if(!isFlying) renderCanvas();
-                ambientFrame = requestAnimationFrame(ambientLoop);
-            }
-            ambientLoop();
-        });
-        
-        // responsivo: se houver redimensionamento, apenas re-render
-        window.addEventListener('resize', () => {
-            renderCanvas();
-        });
-        
-        // DICA: suporte touch/mobile funciona perfeitamente
-    })();
-</script>
+      <div class="offer">
+
+        <h2>
+          Garanta Agora Seu Ebook
+        </h2>
+
+        <p>
+          Comece hoje sua transformação corporal com um método simples,
+          direto e acessível.
+        </p>
+
+        <div class="price">
+          PDF DIGITAL
+        </div>
+
+        <p class="small">
+          Receba imediatamente no WhatsApp após a compra.
+        </p>
+
+        <a class="cta-btn"
+           style="background:#0f0f0f;"
+           href="https://wa.me/244956289088?text=Olá,%20tenho%20interesse%20no%20Método%20Corpo%20Leve"
+           target="_blank">
+           COMPRAR PELO WHATSAPP
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2026 Método Corpo Leve — Todos os direitos reservados.
+  </footer>
+
 </body>
 </html>
